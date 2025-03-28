@@ -3,6 +3,8 @@ package com.example.demo.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
@@ -37,6 +39,8 @@ public class Venue {
   
   private String image;
   
+  
+  @JsonIgnore
   @ElementCollection
   @CollectionTable(name = "venue_images", joinColumns = @JoinColumn(name = "venue_id"))
   @Column(name = "image_url")
@@ -45,6 +49,8 @@ public class Venue {
   private double price;
   private int capacity;
   
+  
+  @JsonIgnore
   @ElementCollection
   @CollectionTable(name = "venue_amenities", joinColumns = @JoinColumn(name = "venue_id"))
   @Column(name = "amenity")
@@ -54,6 +60,8 @@ public class Venue {
   private int reviewCount;
   private boolean featured;
   
+  
+  @JsonIgnore
   @OneToMany(mappedBy = "venue", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Availability> availability = new ArrayList<Availability>();
   
