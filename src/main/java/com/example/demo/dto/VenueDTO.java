@@ -18,6 +18,7 @@ public class VenueDTO {
   private List<AvailabilityDTO> availability;
   private boolean featured;
   
+  
   public Long getId() { return id; }
   public void setId(Long id) { this.id = id; }
   public String getName() { return name; }
@@ -46,4 +47,5 @@ public class VenueDTO {
   public void setAvailability(List<AvailabilityDTO> availability) { this.availability = availability; }
   public boolean isFeatured() { return featured; }
   public void setFeatured(boolean featured) { this.featured = featured; }
+  
 }

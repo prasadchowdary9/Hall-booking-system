@@ -20,8 +20,8 @@ public class UserService {
     if(existingUser.isPresent()){
       throw new RuntimeException("User with this email already exists");
     }
-//    user.setPassword(passwordEncoder.encode(user.getPassword()));
-    user.setPassword(user.getPassword());
+user.setPassword(passwordEncoder.encode(user.getPassword()));
+//    user.setPassword(user.getPassword());
     user.setRole("ROLE_USER");
     return userRepository.save(user);
   }

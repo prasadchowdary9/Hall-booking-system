@@ -13,11 +13,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.dto.BookingDTO;
+import com.example.demo.dto.ConfirmedBookingDTO;
 import com.example.demo.mapper.BookingMapper;
 import com.example.demo.model.Booking;
 import com.example.demo.model.User;
 import com.example.demo.model.Venue;
 import com.example.demo.service.BookingService;
+import com.example.demo.service.EmailService;
 import com.example.demo.service.UserService;
 import com.example.demo.service.VenueService;
 
@@ -28,6 +30,15 @@ public class BookingController {
 
     @Autowired
     private BookingService bookingService;
+    
+    @Autowired
+    private EmailService emailService;
+    
+    
+    
+    
+    
+    
 
     @Autowired
     private UserService userService;
@@ -44,8 +55,8 @@ public class BookingController {
 
     // Get bookings for a specific user
     @GetMapping("/user/{userId}")
-    public ResponseEntity<List<BookingDTO>> getBookingsByUserId(@PathVariable Long userId) {
-        List<BookingDTO> userBookings = bookingService.getBookingsByUserId(userId);
+    public ResponseEntity<List<ConfirmedBookingDTO>> getBookingsByUserId(@PathVariable Long userId) {
+        List<ConfirmedBookingDTO> userBookings = bookingService.getBookingsByUserId(userId);
         return ResponseEntity.ok(userBookings);
     }
 
@@ -58,17 +69,24 @@ public class BookingController {
         if (user == null) {
             return ResponseEntity.badRequest().body("User not found");
         }
+        System.out.println("booking method called");
 
         Venue venue = venueService.getVenueById(venueId);
         if (venue == null) {
             return ResponseEntity.badRequest().body("Venue not found");
         }
+//        User userById = userService.getUserById(userId);
 
         Booking booking = BookingMapper.dtoToEntity(bookingDTO);
+ String emailBody = bookingService.generateBookingEmailBody(booking);
+        System.out.println("mail is sending"); 
+        emailService.sendHtmlEmail(user.getEmail(),"Booking Confirmation Status", emailBody);
+        System.out.println("mail sent ");
         booking.setUser(user);
         booking.setVenue(venue);
         
         Booking createdBooking = bookingService.createBooking(booking);
-        return ResponseEntity.ok("Booking successful! Your booking ID is: " + createdBooking.getId());
+        return ResponseEntity.ok("Booking successfull"+createdBooking);
+//        return ResponseEntity.ok("Booking successful! Your booking ID is: " + createdBooking.getId());
     }
 }
