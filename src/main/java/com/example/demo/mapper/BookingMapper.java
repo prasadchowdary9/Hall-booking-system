@@ -16,6 +16,8 @@ public class BookingMapper {
         booking.setEventType(dto.getEventType());
         booking.setSpecialRequests(dto.getSpecialRequests());
         booking.setPaymentMethod(dto.getPaymentMethod());
+//        booking.setVenue(dto.getVenue());
+       
         // The status and bookingTime are set by default
         return booking;
     }
@@ -31,6 +33,7 @@ public class BookingMapper {
         dto.setEventType(booking.getEventType());
         dto.setSpecialRequests(booking.getSpecialRequests());
         dto.setPaymentMethod(booking.getPaymentMethod());
+        
         return dto;
     }
 }

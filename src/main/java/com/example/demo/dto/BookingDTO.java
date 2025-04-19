@@ -2,6 +2,8 @@ package com.example.demo.dto;
 
 import java.time.LocalDate;
 
+import com.example.demo.model.Venue;
+
 public class BookingDTO {
   private LocalDate date;
   private String timeSlot;
@@ -13,8 +15,15 @@ public class BookingDTO {
   private String specialRequests;
   private boolean agreeToTerms;
   private String paymentMethod;
+  private Venue venue;
   
-  public LocalDate getDate() { return date; }
+  public Venue getVenue() {
+	return venue;
+}
+public void setVenue(Venue venue) {
+	this.venue = venue;
+}
+public LocalDate getDate() { return date; }
   public void setDate(LocalDate date) { this.date = date; }
   public String getTimeSlot() { return timeSlot; }
   public void setTimeSlot(String timeSlot) { this.timeSlot = timeSlot; }

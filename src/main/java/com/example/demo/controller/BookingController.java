@@ -66,6 +66,143 @@ public class BookingController {
         List<ConfirmedBookingDTO> userBookings = bookingService.getBookingsByUserId(userId);
         return ResponseEntity.ok(userBookings);
     }
+    
+    
+    
+    @PostMapping("/create/{userId}")
+    public ResponseEntity<?> createBookingForUser(
+            @PathVariable Long userId,
+            @RequestBody BookingDTO bookingDTO) {
+
+        System.out.println("📩 Booking API called for User ID: " + userId);
+        try {
+            User user = userService.getUserById(userId);
+            if (user == null) {
+                return ResponseEntity.badRequest().body("User not found with ID: " + userId);
+            }
+
+            Venue venuefromfront = bookingDTO.getVenue();
+            if (venuefromfront == null) {
+                return ResponseEntity.badRequest().body("Venue details are missing");
+            }
+
+            Booking booking = BookingMapper.dtoToEntity(bookingDTO);
+            booking.setUser(user);
+            booking.setVenue(venuefromfront.getName());
+            booking.setTotalPrice(venuefromfront.getPrice());
+            booking.setVenueId(venuefromfront.getId());
+            System.out.println("venue details completed");
+
+            Booking createdBooking = bookingService.createBooking(booking);
+            System.out.println("booking created");
+
+            String emailBody = bookingService.generateBookingEmailBody(createdBooking);
+            emailService.sendHtmlEmail(user.getEmail(), "🎉 Booking Confirmation - Venue Hub", emailBody);
+
+            return ResponseEntity.ok("🎉 Booking successful! Your booking ID is: " + createdBooking.getId());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("⚠️ Booking failed: " + e.getMessage());
+        }
+    }
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+//    @PostMapping("/create/{userId}")
+//    public ResponseEntity<?> createBookingForUser(
+//            @PathVariable Long userId,
+//            @RequestBody BookingDTO bookingDTO) {
+//
+//        System.out.println("📩 Booking API called for User ID: " + userId);
+//        try {
+//            // 1. Validate user
+//            User user = userService.getUserById(userId);
+//            if (user == null) {
+//                System.out.println("❌ User not found for ID: " + userId);
+//                return ResponseEntity.badRequest().body("User not found with ID: " + userId);
+//            }
+//            System.out.println("✅ User found: " + user.getName());
+//
+//            // 2. Extract venue from DTO
+//            Venue venuefromfront = bookingDTO.getVenue();
+//            if (venuefromfront == null) {
+//                System.out.println("❌ Venue details not provided in request body");
+//                return ResponseEntity.badRequest().body("Venue details are missing");
+//            }
+//
+//           
+//            System.out.println("✅ Venue received: " + venuefromfront.getName());
+//
+//            // 3. Convert booking DTO
+//            Booking booking = BookingMapper.dtoToEntity(bookingDTO);
+//            if (booking == null) {
+//                System.out.println("❌ Booking DTO to Entity mapping failed!");
+//                return ResponseEntity.badRequest().body("Invalid booking data");
+//            }
+//
+//            // 4. Set user and venue
+//            booking.setUser(user);
+//           
+//
+//            // 5. Save booking
+//            Booking createdBooking = bookingService.createBooking(booking);
+//            System.out.println("💾 Booking saved successfully with ID: " + createdBooking.getId());
+//
+//            // 6. Send confirmation email
+//            String emailBody = bookingService.generateBookingEmailBody(createdBooking);
+//            System.out.println("📧 Sending confirmation email to: " + user.getEmail());
+//            emailService.sendHtmlEmail(user.getEmail(), "🎉 Booking Confirmation - Venue Hub", emailBody);
+//            System.out.println("✅ Email sent successfully.");
+//
+//            return ResponseEntity.ok("🎉 Booking successful! Your booking ID is: " + createdBooking.getId());
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(500).body("⚠️ Booking failed: " + e.getMessage());
+//        }
+//    }
+//
+//    
+//    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 //    // Create a booking for a specific user
 //    @PostMapping("/create/{userId}")
@@ -101,59 +238,59 @@ public class BookingController {
 //    }
     
     
-    @PostMapping("/create/{userId}")
-    public ResponseEntity<?> createBookingForUser(
-            @PathVariable Long userId,
-            @RequestBody BookingDTO bookingDTO,
-            @RequestParam Long venueId) {
-        
-        System.out.println("📩 Booking API called for User ID: " + userId + ", Venue ID: " + venueId);
-        try {
-            // 1. Validate user
-            User user = userService.getUserById(userId);
-            if (user == null) {
-                System.out.println("❌ User not found for ID: " + userId);
-                return ResponseEntity.badRequest().body("User not found with ID: " + userId);
-            }
-            System.out.println("✅ User found: " + user.getName());
-
-            // 2. Get venue from external API
-            VenueDTO venueDTO = venueService.getVenueById(venueId);
-            if (venueDTO == null) {
-                System.out.println("❌ Venue not found for ID: " + venueId);
-                return ResponseEntity.badRequest().body("Venue not found with ID: " + venueId);
-            }
-            System.out.println("✅ Venue found: " + venueDTO.getName());
-
-            // 3. Map DTOs to entities
-            Venue venue = VenueMapper.dtoToEntity(venueDTO);
-            Booking booking = BookingMapper.dtoToEntity(bookingDTO);
-
-            if (booking == null) {
-                System.out.println("❌ Booking DTO to Entity mapping failed!");
-                return ResponseEntity.badRequest().body("Invalid booking data");
-            }
-
-            // 4. Set relations
-            booking.setUser(user);
-            booking.setVenue(venue);
-
-            // 5. Save booking
-            Booking createdBooking = bookingService.createBooking(booking);
-            System.out.println("💾 Booking saved successfully with ID: " + createdBooking.getId());
-
-            // 6. Send confirmation email
-            String emailBody = bookingService.generateBookingEmailBody(createdBooking);
-            System.out.println("📧 Sending confirmation email to: " + user.getEmail());
-            emailService.sendHtmlEmail(user.getEmail(), "🎉 Booking Confirmation - Venue Hub", emailBody);
-            System.out.println("✅ Email sent successfully.");
-
-            return ResponseEntity.ok("🎉 Booking successful! Your booking ID is: " + createdBooking.getId());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(500).body("⚠️ Booking failed: " + e.getMessage());
-        }
-    }
+//    @PostMapping("/create/{userId}")
+//    public ResponseEntity<?> createBookingForUser(
+//            @PathVariable Long userId,
+//            @RequestBody BookingDTO bookingDTO,
+//            @RequestParam Long venueId) {
+//        
+//        System.out.println("📩 Booking API called for User ID: " + userId + ", Venue ID: " + venueId);
+//        try {
+//            // 1. Validate user
+//            User user = userService.getUserById(userId);
+//            if (user == null) {
+//                System.out.println("❌ User not found for ID: " + userId);
+//                return ResponseEntity.badRequest().body("User not found with ID: " + userId);
+//            }
+//            System.out.println("✅ User found: " + user.getName());
+//
+//            // 2. Get venue from external API
+//            VenueDTO venueDTO = venueService.getVenueById(venueId);
+//            if (venueDTO == null) {
+//                System.out.println("❌ Venue not found for ID: " + venueId);
+//                return ResponseEntity.badRequest().body("Venue not found with ID: " + venueId);
+//            }
+//            System.out.println("✅ Venue found: " + venueDTO.getName());
+//
+//            // 3. Map DTOs to entities
+//            Venue venue = VenueMapper.dtoToEntity(venueDTO);
+//            Booking booking = BookingMapper.dtoToEntity(bookingDTO);
+//
+//            if (booking == null) {
+//                System.out.println("❌ Booking DTO to Entity mapping failed!");
+//                return ResponseEntity.badRequest().body("Invalid booking data");
+//            }
+//
+//            // 4. Set relations
+//            booking.setUser(user);
+//            booking.setVenue(venue);
+//
+//            // 5. Save booking
+//            Booking createdBooking = bookingService.createBooking(booking);
+//            System.out.println("💾 Booking saved successfully with ID: " + createdBooking.getId());
+//
+//            // 6. Send confirmation email
+//            String emailBody = bookingService.generateBookingEmailBody(createdBooking);
+//            System.out.println("📧 Sending confirmation email to: " + user.getEmail());
+//            emailService.sendHtmlEmail(user.getEmail(), "🎉 Booking Confirmation - Venue Hub", emailBody);
+//            System.out.println("✅ Email sent successfully.");
+//
+//            return ResponseEntity.ok("🎉 Booking successful! Your booking ID is: " + createdBooking.getId());
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            return ResponseEntity.status(500).body("⚠️ Booking failed: " + e.getMessage());
+//        }
+//    }
 
 }

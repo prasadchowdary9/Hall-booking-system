@@ -7,7 +7,7 @@ import java.time.LocalDate;
 public class ConfirmedBookingDTO {
 
     private Long id;
-    private Long venueId;
+    private String venueId;
     private String venueName;
     private LocalDate date;
     private String time; // e.g., "afternoon" or specific time
@@ -25,11 +25,11 @@ public class ConfirmedBookingDTO {
         this.id = id;
     }
 
-    public Long getVenueId() {
+    public String getVenueId() {
         return venueId;
     }
 
-    public void setVenueId(Long venueId) {
+    public void setVenueId(String venueId) {
         this.venueId = venueId;
     }
 

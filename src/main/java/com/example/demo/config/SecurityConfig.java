@@ -54,7 +54,7 @@ public class SecurityConfig {
                 ).permitAll()
                 .requestMatchers("/api/bookings/user/**").hasRole("USER")
                 .requestMatchers("/api/venues/**").hasRole("ADMIN")  // Explicit role-based access to venues
-                .anyRequest().authenticated()
+                .anyRequest().permitAll()
             )
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

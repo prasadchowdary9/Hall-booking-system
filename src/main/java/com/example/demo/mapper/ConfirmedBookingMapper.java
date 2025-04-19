@@ -17,10 +17,10 @@ public class ConfirmedBookingMapper {
         dto.setGuestCount(booking.getGuestCount());
         dto.setStatus(booking.getStatus());
         dto.setTotalPrice(
-            booking.getVenue() != null ? booking.getVenue().getPrice() * booking.getGuestCount() : 0.0
+            booking.getTotalPrice()
         );
-        dto.setVenueId(booking.getVenue() != null ? booking.getVenue().getId() : null);
-        dto.setVenueName(booking.getVenue() != null ? booking.getVenue().getName() : null);
+        dto.setVenueId(booking.getVenueId()+"");
+        dto.setVenueName(booking.getVenue() );
         return dto;
     }
 
@@ -32,7 +32,7 @@ public class ConfirmedBookingMapper {
         booking.setTimeSlot(dto.getTime());
         booking.setGuestCount(dto.getGuestCount());
         booking.setStatus(dto.getStatus());
-        booking.setVenue(venue);
+        booking.setVenue(venue.getName());
         return booking;
     }
 }

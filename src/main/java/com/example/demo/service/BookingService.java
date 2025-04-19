@@ -30,6 +30,7 @@ public class BookingService {
         for (Booking booking : bookings) {
             bookingDTOs.add(BookingMapper.entityToDto(booking));
         }
+        
         return bookingDTOs;
     }
 
@@ -57,9 +58,7 @@ public class BookingService {
         sb.append("<h3>📌 Booking Details:</h3>");
         sb.append("<ul>");
         sb.append("<li><strong>Booking ID:</strong> ").append(booking.getId()).append("</li>");
-        sb.append("<li><strong>Venue:</strong> ").append(
-                booking.getVenue() != null ? booking.getVenue().getName() : "N/A"
-        ).append("</li>");
+        sb.append("<li><strong>Venue:</strong> ").append(booking.getVenue()).append("</li>");
         sb.append("<li><strong>Date:</strong> ").append(booking.getDate()).append("</li>");
         sb.append("<li><strong>Status:</strong> SUCCESS ✅</li>");
         sb.append("</ul>");
