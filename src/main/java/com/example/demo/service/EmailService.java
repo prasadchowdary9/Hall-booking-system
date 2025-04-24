@@ -21,7 +21,7 @@ public class EmailService {
           MimeMessage message = mailSender.createMimeMessage();
           MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
 
-          helper.setFrom("prasadchowdary983@gmail.com"); // Update with your sender email
+          helper.setFrom("venuehub.com@gmail.com"); // Update with your sender email
           helper.setTo(to);
           helper.setSubject(subject);
           helper.setText(htmlContent, true); // Set true for HTML content
@@ -50,13 +50,26 @@ public class EmailService {
   }
 
   private String buildWelcomeEmail(String userName) {
-      return "<div style='font-family: Arial, sans-serif; text-align: center; padding: 20px;'>"
-              + "<h2 style='color: #333;'>Thank You for Registering, " + userName + "!</h2>"
-              + "<p>Welcome to <span style='font-weight: bold; color: #007BFF;'>VenueHub</span>. We’re excited to have you on board!</p>"
-              + "<a href='https://your-website.com' style='display: inline-block; margin-top: 15px; padding: 10px 20px; font-size: 16px; "
-              + "color: white; background-color: #007BFF; text-decoration: none; border-radius: 5px;'>Visit VenueHub</a>"
-              + "<p style='margin-top: 20px;'>Happy Booking!<br><strong>VenueHub Team</strong></p>"
-              + "<img src='https://your-logo-url.com/logo.png' alt='VenueHub Logo' style='width: 150px; margin-top: 10px;'>"
-              + "</div>";
+      return "
+        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f6f8; padding: 40px;">
+  <div style="max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.08); overflow: hidden;">
+    <div style="padding: 30px; text-align: center;">
+    
+      <h2 style="color: #333333; font-size: 26px; margin-bottom: 10px;">Thank You for Registering, <span style="color: #007BFF;">userName</span>!</h2>
+      <p style="font-size: 16px; color: #555555; line-height: 1.6;">
+        Welcome to <strong style="color: #007BFF;">VenueHub</strong>. We’re excited to have you on board and can’t wait for you to start exploring our platform.
+      </p>
+      <a href="https://your-website.com" 
+         style="display: inline-block; margin-top: 25px; padding: 12px 30px; font-size: 16px; color: #ffffff; background-color: #007BFF; 
+                text-decoration: none; border-radius: 8px; font-weight: 600; box-shadow: 0 4px 12px rgba(0,123,255,0.3);">
+        Visit VenueHub
+      </a>
+      <p style="margin-top: 35px; font-size: 15px; color: #777777;">
+        Happy Booking!<br><strong style="color: #007BFF;">VenueHub Team</strong>
+      </p>
+    </div>
+  </div>
+</div>
+          ";
   }
 }
