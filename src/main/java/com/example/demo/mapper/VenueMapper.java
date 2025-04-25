@@ -16,7 +16,7 @@ public class VenueMapper {
             return null;
         }
         Venue venue = new Venue();
-        venue.setId(dto.getId());
+        venue.setId(Long.parseLong(dto.getId()));
         venue.setName(dto.getName());
         venue.setLocation(dto.getLocation());
         venue.setCity(dto.getCity());

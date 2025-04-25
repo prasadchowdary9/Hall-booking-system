@@ -44,7 +44,7 @@ public class UserController {
   @Autowired
   private JwtUtil jwtUtil;
   
-//  private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//private BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
   
   
   @Autowired
@@ -58,12 +58,15 @@ public class UserController {
 //    if (!signupRequest.getPassword().equals(signupRequest.getConfirmPassword())) {
 //      return ResponseEntity.badRequest().body("Passwords do not match");
 //    }
+	  System.out.println("signup method called");
     User user = new User();
     user.setName(signupRequest.getName());
     user.setEmail(signupRequest.getEmail());
     user.setPassword(signupRequest.getPassword());
     user.setRole("ROLE_USER");
     User createdUser = userService.signup(user);
+    System.out.println("email is: "+signupRequest.getEmail());
+    System.out.println("password is :"+signupRequest.getPassword());
     
     emailService.sendWelcomeEmail(createdUser.getEmail(), createdUser.getName());
     
@@ -72,6 +75,10 @@ public class UserController {
   
   @PostMapping("/login")
   public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+	  System.out.println("Login Method called");
+	  System.out.println("email is: "+loginRequest.getEmail());
+	    System.out.println("password is :"+loginRequest.getPassword());
+	    
       try {
           authenticationManager.authenticate(
               new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword())

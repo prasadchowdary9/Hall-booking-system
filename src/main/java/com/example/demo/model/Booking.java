@@ -40,11 +40,27 @@ public class Booking {
   @JoinColumn(name = "user_id")
   private User user;
   
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "venue_id")
-  private Venue venue;
+//  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "venue_Name")
+  private String venue;
   
-  // Getters and Setters
+  private double totalPrice;
+  
+  private Long venueId;
+  
+  public double getTotalPrice() {
+	return totalPrice;
+}
+public void setTotalPrice(double totalPrice) {
+	this.totalPrice = totalPrice;
+}
+public Long getVenueId() {
+	return venueId;
+}
+public void setVenueId(Long venueId) {
+	this.venueId = venueId;
+}
+// Getters and Setters
   public Long getId() { return id; }
   public void setId(Long id) { this.id = id; }
   public LocalDate getDate() { return date; }
@@ -71,6 +87,6 @@ public class Booking {
   public void setBookingTime(LocalDateTime bookingTime) { this.bookingTime = bookingTime; }
   public User getUser() { return user; }
   public void setUser(User user) { this.user = user; }
-  public Venue getVenue() { return venue; }
-  public void setVenue(Venue venue) { this.venue = venue; }
+  public String getVenue() { return venue; }
+  public void setVenue(String venue) { this.venue = venue; }
 }
