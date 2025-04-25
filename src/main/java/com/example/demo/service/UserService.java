@@ -20,7 +20,8 @@ public class UserService {
     if(existingUser.isPresent()){
       throw new RuntimeException("User with this email already exists");
     }
-    user.setPassword(passwordEncoder.encode(user.getPassword()));
+user.setPassword(passwordEncoder.encode(user.getPassword()));
+//    user.setPassword(user.getPassword());
     user.setRole("ROLE_USER");
     return userRepository.save(user);
   }
@@ -28,4 +29,11 @@ public class UserService {
   public User findByEmail(String email) {
     return userRepository.findByEmail(email).orElse(null);
   }
+
+public User getUserById(Long userId) {
+	// TODO Auto-generated method stub
+	Optional<User> user= userRepository.findById(userId);
+	return user.isPresent()?user.get():null;
+	
+}
 }
